@@ -15,14 +15,14 @@ import java.util.Optional;
 public class Main {
 
     public static void main(String[] args) {
-        Genero drama = new Genero(1, "Drama");
-        Genero comedia = new Genero(2, "Comedia");
+
         List<Ciudad> ciudadesAsia = List.of(new Ciudad(1, "Tokio", 37000000, "xx"));
         List<Ciudad> ciudadesEuropa = List.of(new Ciudad(2, "Londres", 14000000, "xx"));
         List<Ciudad> ciudadesAfrica = List.of(new Ciudad(3, "Lagos", 21000000, "xx"));
         List<Ciudad> ciudadesAmerica = List.of(new Ciudad(4, "Ciudad de Mexico", 21000000, "xx"));
         List<Ciudad> ciudadesOceania = List.of(new Ciudad(5, "Sydney", 5000000, "xx"));
         List<Ciudad> ciudadesSudamerica = List.of(new Ciudad(6, "Sao Paulo", 22000000, "xx"));
+
         List<Pais> paises = List.of(
                 new Pais("JP", "Japon", "Asia", 2000, 1, 125000000, ciudadesAsia),
                 new Pais("RU", "Reino Unido", "Europa", 1500, 2, 675000000, ciudadesEuropa),
@@ -31,7 +31,20 @@ public class Main {
                 new Pais("AU", "Australia", "Oceania", 12000, 5, 25000000, ciudadesOceania),
                 new Pais("BR", "Brasil", "America del Sur", 1521, 6, 212000000, ciudadesSudamerica)
         );
+        
+        List<Pais> paisesOrdenadosPorCiudades = Consultoria.ordenarPorNumeroDeCiudadesDesc(paises);
+        System.out.println("Paises ordenados por numero de ciudades (descendente):");
+        paisesOrdenadosPorCiudades.forEach(pais -> System.out.println(pais.getNombrePais() + ": " + pais.getCiudades().size() + " ciudades"));
+
+        List<Pais> paisesOrdenadosPorPoblacion = Consultoria.ordenarPorPoblacionAsc(paises);
+        System.out.println("\nPaises ordenados por poblacion (ascendente):");
+        paisesOrdenadosPorPoblacion.forEach(pais -> System.out.println(pais.getNombrePais() + ": " + pais.getPoblacion() + " habitantes"));
+
+        Genero drama = new Genero(1, "Drama");
+        Genero comedia = new Genero(2, "Comedia");
+
         List<Genero> genero = List.of(new Genero(1, "Drama"), new Genero(2, "Comedia"));
+
         List<Director> directoresForrestGump = List.of(new Director(1, "Robert Zemeckis", List.of("Oscar")));
         List<Director> directoresTrumanShow = List.of(new Director(2, "Peter Weir", List.of("Golden Globe")));
         List<Director> directoresLittleMissSunshine = List.of(new Director(3, "Jonathan Dayton", List.of("BAFTA")), new Director(4, "Valerie Faris", List.of("Independent Spirit Award")));
@@ -45,6 +58,16 @@ public class Main {
                 new Pelicula(104, "Juno", 2007, "A", directoresJuno, List.of(drama, comedia)),
                 new Pelicula(105, "The Grand Budapest Hotel", 2014, "A", directoresGrandBudapest, List.of(drama, comedia))
         );
+        
+        
+        List<Pelicula> peliculasDramaYComedia = Consultoria.dramaYComedia(peliculas);
+        System.out.println("Peliculas con generos Drama y Comedia:");
+
+        if (peliculasDramaYComedia.isEmpty()) {
+            System.out.println("No se encontraron peliculas que tengan solo los generos 'Drama' y 'Comedia'.");
+        } else {
+            peliculasDramaYComedia.forEach(pelicula -> System.out.println(pelicula.getTituloPelicula()));
+        }
 
         Map<String, Ciudad> ciudadesPorContinente = Consultoria.ciudadesMasPobladasPorContinente(paises);
         System.out.println("Ciudades mas pobladas por continente:");
@@ -53,14 +76,9 @@ public class Main {
         });
         Optional<Ciudad> ciudadMasPoblada = Consultoria.ciudadMasPobladaContinentes(paises);
         ciudadMasPoblada.ifPresent(ciudad -> System.out.println("Ciudad mas poblada de todos los continentes: " + ciudad.getNombreCiudad()));
-
-        List<Pelicula> peliculasDramaYComedia = Consultoria.dramaYComedia(peliculas);
-        System.out.println("Peliculas con generos 'Drama' y 'Comedia':");
-
-        if (peliculasDramaYComedia.isEmpty()) {
-            System.out.println("No se encontraron peliculas que tengan solo los generos 'Drama' y 'Comedia'.");
-        } else {
-            peliculasDramaYComedia.forEach(pelicula -> System.out.println(pelicula.getTituloPelicula()));
-        }
+        
+        Guardador.guardarDatos(paises, peliculasDramaYComedia, ciudadesPorContinente, ciudadMasPoblada, paisesOrdenadosPorCiudades, paisesOrdenadosPorPoblacion, "resultados.txt");
+        System.out.println("Datos guardados en 'resultados.txt'");
     }
+    
 }

@@ -13,13 +13,9 @@ public class Genero {
     private int idGenero;
     private String name;
     
-    public Genero(){
-        
-    }
-
     public Genero(int idGenero, String nombreGenero) {
         this.idGenero = idGenero;
-        this.name = name;
+        this.name = nombreGenero;
     }
 
     public int getIdGenero() {
